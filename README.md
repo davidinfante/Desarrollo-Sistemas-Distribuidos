@@ -13,7 +13,7 @@ Modo de uso en una sola máquina:
 - Lanzar los Clientes (los cuales se conectarán aleatoriamente a un servidor operativo) y realizar las operaciones.
 
 
-*** EXAMEN ***
+*** EXAMEN ***  
 a) - Se han añadido las operaciones pertinentes en el Cliente (Donar Causa 2, Consultar total Causa 2 y
 	Consultar total Ambas Causas).
 - Se han añadido las operaciones donarCausa2(String), totalDonadoCausa2(String) y totalDonadoAmbasCausas(String)
