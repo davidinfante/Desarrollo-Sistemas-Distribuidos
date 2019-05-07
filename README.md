@@ -14,14 +14,17 @@ Modo de uso en una sola máquina:
 
 
 *** EXAMEN ***  
-a) - Se han añadido las operaciones pertinentes en el Cliente (Donar Causa 2, Consultar total Causa 2 y
+a)
+- Se han añadido las operaciones pertinentes en el Cliente (Donar Causa 2, Consultar total Causa 2 y
 	Consultar total Ambas Causas).
 - Se han añadido las operaciones donarCausa2(String), totalDonadoCausa2(String) y totalDonadoAmbasCausas(String)
 	en la Interfaz ServidorCliente.
 - Se han añadido las operaciones getTotalDonadoCausa2(), getTotalDonadoAmbasCausas() en la Interfaz Servidor Servidor.
 - Se han implementado las nuevas operaciones en el BalanceadorCarga
 
-b) - Por defecto se ha establecido el número de réplicas a 3 (0, 1 y 2), pero el número de servidores es 
+b)
+- Por defecto se ha establecido el número de réplicas a 3 (0, 1 y 2), pero el número de servidores es 
 	parametrizable mediante las variables numServer_max en Servidor y Cliente.
 
-c) - Se ha establecido la réplica con ID=2 (la tercera) como réplica en la que no se puede donar a la Causa 2.
+c)
+- Se ha establecido la réplica con ID=2 (la tercera) como réplica en la que no se puede donar a la Causa 2.
