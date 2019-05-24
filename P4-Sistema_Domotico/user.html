@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<title>User</title>
+		<meta name="description" content="User Interface">
+    	<meta name="author" content="David Infante Casas">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<script src="/socket.io/socket.io.js"></script>
+	</head>
+
+	<!-- Page's body -->
+	<body>
+		<h3>Values</h3>
+		<span>Luminosity (0 ~ 10): </span><span id="luminosity">0</span>
+		<span id="maxluminosity" style="color:red; display:none;">MaxLuminosity limit exceeded</span>
+		<span id="minluminosity" style="color:red; display:none;">MinLuminosity limit exceeded</span>
+		<br>
+
+		<span>Temperature (-5 ~ 45): </span><span id="temperature">0</span>
+		<span id="maxtemperature" style="color:red; display:none;">MaxTemperature limit exceeded</span>
+		<span id="mintemperature" style="color:red; display:none;">MinTemperature limit exceeded</span>
+		<br>
+
+		<span>Presence (0 ~ 1): </span><span id="presence">0</span>
+		<br>
+
+		<h3>Shutter:</h3>
+		<span id="shutter">100</span><span>% raised</span><br><br>
+		<button id="raise" onclick="javascript:raiseShutter();" type="button">Raise</button>
+		<button id="lower" onclick="javascript:lowerShutter();" type="button">Lower</button>
+
+		<p id="limitsExceeded" style="color:red; display:none;">Both limits exceeded - lowering shutter</p>
+
+		<h3>Air conditioner</h3>
+		<select id="air_conditioner">
+			<option value="off">Off</option>
+			<option value="on">On</option>
+		</select>
+
+		<h3>TV</h3>
+		<span>TV Off/On (0 ~ 1): </span><span id="tv">0</span>
+
+		<h3>Manual/Auto Mode</h3>
+		<select id="manual_auto">
+			<option value="auto">Auto</option>
+			<option value="manual">Manual</option>
+		</select>
+	</body>
+
+	<script type="text/javascript">
+		var url = "localhost:8080";
+		var socket = io.connect(url);
+
+		socket.on('sensors', function(luminosity, temperature, presence) {
+			document.getElementById('luminosity').innerHTML = luminosity;
+			document.getElementById('temperature').innerHTML = temperature;
+			document.getElementById('presence').innerHTML = presence;
+		});
+
+		socket.on('shutter', function(value) {
+			document.getElementById('shutter').innerHTML = value;
+		});
+
+		socket.on('air_conditioner', function(status) {
+			if (status) document.getElementById('air_conditioner').value = "on";
+			else document.getElementById('air_conditioner').value = "off";
+		});
+
+		socket.on('tv', function(value) {
+			document.getElementById('tv').innerHTML = value;
+		});
+
+		socket.on('warningOn', function(type) {
+			document.getElementById(type).style.display = 'inherit';
+		});
+
+		socket.on('warningOff', function(type) {
+			document.getElementById('max'+type).style.display = 'none';
+			document.getElementById('min'+type).style.display = 'none';
+			document.getElementById('limitsExceeded').style.display = 'none';
+		});
+
+		socket.on('limitsExceeded', function() {
+			if (document.getElementById('manual_auto').value == 'auto')
+				document.getElementById('limitsExceeded').style.display = 'inherit';
+		});
+
+		socket.on('manual_auto', function(status) {
+			if (status) document.getElementById('manual_auto').value = "manual";
+			else document.getElementById('manual_auto').value = "auto";
+		});
+
+		function raiseShutter() {
+			var value = +document.getElementById('shutter').innerHTML;
+			if (value < 100) {
+				value += 10;
+				document.getElementById('shutter').innerHTML = value;
+				socket.emit('shutter', value);
+			}
+		}
+
+		function lowerShutter() {
+			var value = +document.getElementById('shutter').innerHTML;
+			if (value > 0) {
+				value -= 10;
+				document.getElementById('shutter').innerHTML = value;
+				socket.emit('shutter', value);
+			}
+		}
+
+		var air_conditionerStateChanged = document.getElementById('air_conditioner');
+		air_conditionerStateChanged.addEventListener('change', function() {
+			var status = false;
+			if (document.getElementById('air_conditioner').value == 'off') status = false;
+			else status = true;
+			socket.emit('air_conditioner', status);
+		});
+
+		var tvStateChanged = document.getElementById('tv');
+		tvStateChanged.addEventListener('change', function() {
+			var status = 0;
+			if (document.getElementById('tv').value == 'off') status = 0;
+			else status = 1;
+			socket.emit('tv', status);
+		});
+
+		var manual_autoStateChanged = document.getElementById('manual_auto');
+		manual_autoStateChanged.addEventListener('change', function() {
+			var status = false;
+			if (document.getElementById('manual_auto').value == 'auto') status = false;
+			else status = true;
+			socket.emit('manual_auto', status);
+		});
+
+	</script>
+</html>

@@ -1,7 +1,7 @@
 # Desarrollo-Sistemas-Distribuidos
 Prácticas de la asignatura Desarollo de Sistemas Distribuidos en la UGR
 
-### Práctica 3 -JavaRMI
+### Práctica 3 - JavaRMI
 Modo de uso en una sola máquina:
 
 - Modificar en Cliente y Servidor la variable numServer_max por el número máximo de servidores que sean necesarios.
@@ -28,3 +28,20 @@ b)
 
 c)
 - Se ha establecido la réplica con ID=2 (la tercera) como réplica en la que no se puede donar a la Causa 2.
+
+### Práctica 4 - Sistema Domótico
+
+- Ejecutar: node server.js
+- Conectar a: localhost:8080 para la interfaz de usuario
+- Conectar a: localhost:8080/sensors.html para la vista de sensores
+
+El sistema enciende automáticamente el aire acondicionado si se superan los 22 grados;
+lo apaga si la temperatura se mantiene por debajo de 23.
+
+La persiana tiene 10 posiciones entre 0% subida y 100% subida, subiendola o bajándola de 10% en 10%.
+
+Si el sistema se encuentra en modo "Auto", la persiana se bajará si se exceden los límites de
+luminosidad y temperatura. Además mostrará una notificación en rojo si se superan ambos límites.
+
+Si se detecta presencia se encenderá la TV automáticamente; si se deja de detectar y tras 60 segundos
+sigue sin haber presencia, se apagará la TV.
